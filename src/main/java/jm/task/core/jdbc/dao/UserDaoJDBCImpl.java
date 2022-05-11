@@ -8,26 +8,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
-    private Connection connection;
+    private Connection connection = Util.getConnection();
 
 
-    public UserDaoJDBCImpl() {
-        try {
-            connection = Util.getConnection();
-
-        } catch (SQLException e) {
-            System.out.println(e.getCause());
-        }
-    }
+    public UserDaoJDBCImpl() { }
 
     public void createUsersTable() {
         try {
             Statement statement = connection.createStatement();
-            String command = "CREATE TABLE USER (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR (30),lastName VARCHAR (30), age INT )";
-            int result = statement.executeUpdate(command);
+            String command = "CREATE TABLE if NOT EXISTS USER (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR (30),lastName VARCHAR (30), age INT )";
+            statement.executeUpdate(command);
             statement.close();
         } catch (SQLException e) {
-            System.out.println("Данная таблица уже создана");
+            throw new RuntimeException(e);
         }
     }
 
@@ -53,7 +46,7 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.setByte(3, age);
             preparedStatement.executeUpdate();
             preparedStatement.close();
-            System.out.println("User с именем "+ name+" добавлен в таблицу");
+            System.out.println("User с именем " + name + " добавлен в таблицу");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -61,9 +54,9 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void removeUserById(long id) {
         try {
-            Statement statement = connection.createStatement();
-            String command = "DELETE FROM USER WHERE id=" + id;
-            statement.executeUpdate(command);
+            PreparedStatement statement = connection.prepareStatement("DELETE FROM USER WHERE id=?");
+            statement.setLong(1, id);
+            statement.executeUpdate();
             statement.close();
 
         } catch (SQLException e) {

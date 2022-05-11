@@ -14,14 +14,14 @@ public class Main {
         Util.getConnection();
         UserService userService = new UserServiceImpl();
         userService.createUsersTable();
-        userService.saveUser("Nicol","Pi", (byte) 12);
-        userService.saveUser("Nicolay","Pic", (byte) 18);
-        userService.saveUser("Nick","Petros", (byte) 45);
-        userService.saveUser("Ni","Petroser", (byte) 23);
+        userService.saveUser("Nicol", "Pi", (byte) 12);
+        userService.saveUser("Nicolay", "Pic", (byte) 18);
+        userService.saveUser("Nick", "Petros", (byte) 45);
+        userService.saveUser("Ni", "Petroser", (byte) 23);
         userService.getAllUsers();
         userService.cleanUsersTable();
         userService.dropUsersTable();
-
+        Util.getConnection().close();
 
     }
 }
