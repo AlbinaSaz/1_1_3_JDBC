@@ -1,20 +1,22 @@
 package jm.task.core.jdbc.util;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Util {
-    private static String url = "jdbc:MySQL://localhost:3306/users";
-    private static String username ="root";
-    private static String password = "fkm,byfA1212";
+    private final static String URL = "jdbc:MySQL://localhost:3306/users";
+    private final static String USERNANE = "root";
+    private final static String PASSWORD = "fkm,byfA1212";
+    private static Connection connection;
 
-    // реализуйте настройку соеденения с БД
-    public static Connection getConnection () {
+    public static Connection getConnection() {
         try {
-            return DriverManager.getConnection(url,username,password);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            Class.forName("com.mysql.jdbc.Driver"); //ненависть
+            connection = DriverManager.getConnection(URL, USERNANE, PASSWORD);
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
+        return connection;
     }
-
 }
